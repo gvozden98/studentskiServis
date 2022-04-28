@@ -10,39 +10,108 @@ namespace Student {
         string prezime;
         double prosek;
         int trenutnaGodinaStudija;
-        DateTime datumUpisa;
-        BrojIndeksa brojIndeksa;
-        Smer smer;
+        public DateTime datumUpisa;
+        public BrojIndeksa brojIndeksa;
+        public Smer smer;
 
         public string Ime { get => ime; set => ime = value; }
         public string Prezime { get => prezime; set => prezime = value; }
         public double Prosek { get => prosek; set => prosek = value; }
         public int TrenutnaGodinaStudija { get => trenutnaGodinaStudija; set => trenutnaGodinaStudija = value; }
         public DateTime DatumUpisa { get => datumUpisa; set => datumUpisa = value; }
-        private BrojIndeksa BrojIndeksa1 { get => brojIndeksa; set => brojIndeksa = value; }
-        private Smer Smer1 { get => smer; set => smer = value; }
+        
+        public Smer FaxSmer { get => smer; set => smer = value; }
 
-        struct BrojIndeksa
-        {
-            int godina;
-            int broj;
-        }
+       
 
-        enum Smer
-        {
-            ISIT,
-            ME,
-            OM,
-            OK
-        }
 
+
+    }
+
+    public struct BrojIndeksa
+    {
+        public int godina { get; set; }
+        public int broj { get; set; }
+    }
+    public enum Smer
+    {
+        ISIT,
+        ME,
+        OM,
+        OK
     }
 
     class Program
     {
         public static void Kreiranje(List<Student> studenti)
-        {
-            studenti.Add(new Student());
+        {   Student s = new Student();
+            //string ime, prezime, unosDatumaUpisa;
+            //double prosek;
+            //int trenutnaGodinaStudija;
+            //DateTime datumUpisa;
+            //BrojIndeksa brojInd;
+            //Smer smer = new Smer();
+            Console.WriteLine("Kreiranje\n");
+
+            Console.WriteLine("Ime studenta:");
+            s.Ime = Console.ReadLine();
+
+            Console.WriteLine("Prezime studenta:");
+            s.Prezime = Console.ReadLine();
+
+            Console.WriteLine("Prosek studenta:");
+            s.Prosek = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine("Trenutna godina studija:");
+            s.TrenutnaGodinaStudija = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Datum upisa: dd/MM/yyyy");
+            bool isValidDate = DateTime.TryParse(Console.ReadLine(), out s.datumUpisa);
+            while (!isValidDate)
+            {
+                isValidDate = DateTime.TryParse(Console.ReadLine(), out s.datumUpisa);
+            }
+            Console.WriteLine("Broj indeksa u formatu: godina_studija/broj_indeksa");
+            string brojIndeksa = Console.ReadLine();
+            string[] godinaBrojIndeksa = brojIndeksa.Split('/');
+            Console.WriteLine(godinaBrojIndeksa[0]);
+            Console.WriteLine(godinaBrojIndeksa[1]);
+            s.brojIndeksa.godina = Int32.Parse(godinaBrojIndeksa[0]);
+            s.brojIndeksa.broj = Int32.Parse(godinaBrojIndeksa[1]);
+            bool odgovor = false;
+            while (!odgovor)
+            {
+                Console.WriteLine("Smer: ISIT, MEN, OM, OK");
+                string smerText = Console.ReadLine().ToUpper();
+                switch (smerText)
+                {
+                    case "ISIT":
+                        s.smer = Smer.ISIT;
+                        odgovor = true;
+                        break;
+                    case "MEN":
+                        s.smer = Smer.ME;
+                        odgovor = true;
+                        break;
+                    case "OM":
+                        s.smer = Smer.OM;
+                        odgovor = true;
+                        break;
+                    case "OK":
+                        s.smer = Smer.OK;
+                        odgovor = true;
+                        break;
+                    default:
+                        Console.WriteLine("Nije dobro uneto ime smera!");
+                        break;
+                }
+            }
+            
+
+
+
+            Console.WriteLine("ok");
+            //studenti.Add(new Student());
         }
         void PrikazJednogStudenta()
         {
@@ -81,7 +150,6 @@ namespace Student {
                 switch (odgovorKorisnika)
                 {
                     case "1":
-                        Console.WriteLine("Kreiranje");
                         Kreiranje(studenti);
                         break;
                     case "2":
