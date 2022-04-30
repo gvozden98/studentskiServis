@@ -11,7 +11,7 @@ namespace Student {
         double prosek;
         int trenutnaGodinaStudija;
         public DateTime datumUpisa;
-        public BrojIndeksa brojIndeksa;
+        BrojIndeksa brojIndeksa;
         public Smer smer;
 
         public string Ime { get => ime; set => ime = value; }
@@ -19,7 +19,7 @@ namespace Student {
         public double Prosek { get => prosek; set => prosek = value; }
         public int TrenutnaGodinaStudija { get => trenutnaGodinaStudija; set => trenutnaGodinaStudija = value; }
         public DateTime DatumUpisa { get => datumUpisa; set => datumUpisa = value; }
-        
+        public BrojIndeksa BrojIndeksa { get => brojIndeksa; set => brojIndeksa = value; }
         public Smer FaxSmer { get => smer; set => smer = value; }
 
        
@@ -32,6 +32,12 @@ namespace Student {
     {
         public int godina { get; set; }
         public int broj { get; set; }
+
+        public BrojIndeksa(int god, int br)
+        {
+            godina = god;
+            broj = br;
+        }
     }
     public enum Smer
     {
@@ -44,13 +50,9 @@ namespace Student {
     class Program
     {
         public static void Kreiranje(List<Student> studenti)
-        {   Student s = new Student();
-            //string ime, prezime, unosDatumaUpisa;
-            //double prosek;
-            //int trenutnaGodinaStudija;
-            //DateTime datumUpisa;
-            //BrojIndeksa brojInd;
-            //Smer smer = new Smer();
+        {   
+            Student s = new Student();
+            
             Console.WriteLine("Kreiranje\n");
 
             Console.WriteLine("Ime studenta:");
@@ -60,7 +62,26 @@ namespace Student {
             s.Prezime = Console.ReadLine();
 
             Console.WriteLine("Prosek studenta:");
-            s.Prosek = Convert.ToDouble(Console.ReadLine());
+            string? prosekPom;
+            double prosekVred;
+            bool okParse=false;
+           ;
+            do
+            {
+                
+                prosekPom = Console.ReadLine();
+                okParse = Double.TryParse(prosekPom, out prosekVred);
+                if (okParse == true)
+                {
+                    s.Prosek = prosekVred;
+                }
+                else
+                {
+                    Console.WriteLine("Prosek studenta pogesno unesen!\nPokusajte ponovo:");
+                }
+            }
+            while (!okParse);
+
 
             Console.WriteLine("Trenutna godina studija:");
             s.TrenutnaGodinaStudija = Convert.ToInt32(Console.ReadLine());
@@ -74,14 +95,13 @@ namespace Student {
             Console.WriteLine("Broj indeksa u formatu: godina_studija/broj_indeksa");
             string brojIndeksa = Console.ReadLine();
             string[] godinaBrojIndeksa = brojIndeksa.Split('/');
-            Console.WriteLine(godinaBrojIndeksa[0]);
+            Console.WriteLine(godinaBrojIndeksa[0]); // <--------------------- Mora da se hendla exception
             Console.WriteLine(godinaBrojIndeksa[1]);
-            s.brojIndeksa.godina = Int32.Parse(godinaBrojIndeksa[0]);
-            s.brojIndeksa.broj = Int32.Parse(godinaBrojIndeksa[1]);
+            s.BrojIndeksa = new BrojIndeksa(Int32.Parse(godinaBrojIndeksa[0]), Int32.Parse(godinaBrojIndeksa[1]));
             bool odgovor = false;
             while (!odgovor)
             {
-                Console.WriteLine("Smer: ISIT, MEN, OM, OK");
+                Console.WriteLine("Smer: ISIT, ME, OM, OK");
                 string smerText = Console.ReadLine().ToUpper();
                 switch (smerText)
                 {
@@ -89,7 +109,7 @@ namespace Student {
                         s.smer = Smer.ISIT;
                         odgovor = true;
                         break;
-                    case "MEN":
+                    case "ME":
                         s.smer = Smer.ME;
                         odgovor = true;
                         break;
@@ -106,12 +126,12 @@ namespace Student {
                         break;
                 }
             }
-            
 
 
 
-            Console.WriteLine("ok");
-            //studenti.Add(new Student());
+
+            Console.WriteLine(s.FaxSmer + "\n" + s.Ime + "\n" + s.Prezime + "\n" + s.Prosek + "\n" + s.TrenutnaGodinaStudija + "\n" + s.DatumUpisa.Date.ToString("dd-MM-yyyy"));
+            studenti.Add(s);
         }
         void PrikazJednogStudenta()
         {
@@ -168,13 +188,16 @@ namespace Student {
                         Console.WriteLine("\n*** Dovidjenja ***\n");
                         return;
                     default:
+                        //Console.WriteLine(studenti[0].FaxSmer + "\n" + studenti[0].Ime + "\n" + studenti[0].Prezime + "\n" + studenti[0].Prosek + "\n" + studenti[0].TrenutnaGodinaStudija + "\n" + studenti[0].DatumUpisa.Date.ToString("dd-MM-yyyy"));
+
+
                         Console.WriteLine("Pogresna operacija!\nPokusajte ponovo: ");
                         break;
                 }
                 
             }
-      
-                              
+
+
 
         }
     }
