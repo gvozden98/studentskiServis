@@ -27,6 +27,7 @@ namespace Student {
 
 
     }
+   
 
     public struct BrojIndeksa
     {
@@ -45,6 +46,30 @@ namespace Student {
         ME,
         OM,
         OK
+    }
+    public static class Extension
+    {
+        public static string Ispis (this Smer s)
+        {
+
+            switch (s)
+            {
+                case Smer.ISIT:
+                    return "Informacione tehnologije";
+                    
+                case Smer.ME:
+                    return "Menadzment";
+                    
+                case Smer.OM:
+                    return "Operacioni menadzment";
+                    
+                case Smer.OK:
+                    return "Upravljanje kvalitetom";
+                    
+                default:
+                    return "";
+            }
+        }
     }
 
     class Program
@@ -196,7 +221,7 @@ namespace Student {
             {
                 if (s.BrojIndeksa.godina==godInd && s.BrojIndeksa.broj==brInd)
                 {
-                    Console.WriteLine(s.Ime + "\n" + s.Prezime + "\n" + s.Prosek + "\n" + s.TrenutnaGodinaStudija + "\n" + s.DatumUpisa.Date.ToString("dd-MM-yyyy")+ "\n"+ s.BrojIndeksa.godina +$"/"+ s.BrojIndeksa.broj + "\n" + s.FaxSmer + "\n");
+                    Console.WriteLine(s.Ime + "\n" + s.Prezime + "\n" + s.Prosek + "\n" + s.TrenutnaGodinaStudija + "\n" + s.DatumUpisa.Date.ToString("dd-MM-yyyy")+ "\n"+ s.BrojIndeksa.godina +$"/"+ s.BrojIndeksa.broj + "\n" + s.FaxSmer.Ispis() +"\n");
                     return;
                 }
                 
@@ -208,7 +233,7 @@ namespace Student {
         {
             foreach (Student s in studenti)
             {
-                Console.WriteLine(s.Ime + "\n" + s.Prezime + "\n" + s.Prosek + "\n" + s.TrenutnaGodinaStudija + "\n" + s.DatumUpisa.Date.ToString("dd-MM-yyyy")+ "\n"+ s.BrojIndeksa.godina +$"/"+ s.BrojIndeksa.broj + "\n" +s.FaxSmer + "\n");
+                Console.WriteLine(s.Ime + "\n" + s.Prezime + "\n" + s.Prosek + "\n" + s.TrenutnaGodinaStudija + "\n" + s.DatumUpisa.Date.ToString("dd-MM-yyyy")+ "\n"+ s.BrojIndeksa.godina +$"/"+ s.BrojIndeksa.broj + "\n" + s.FaxSmer.Ispis() + "\n");
 
             }
             return;
