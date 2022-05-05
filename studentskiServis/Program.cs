@@ -70,6 +70,14 @@ namespace Student {
                     return "";
             }
         }
+        public static string IspisStudentaUTabeli(this Student student)
+        {
+
+            return 
+                "Ime\t" +"Prezime\t\t" + "Broj Indeksa\t" + "Prosek\t" + "Trenutna Godina\t" + "Smer\t" + "Datum Upisa\t\n"+
+                student.Ime + "\t" + student.Prezime + "\t" + student.BrojIndeksa.godina+ $"/" + student.BrojIndeksa.broj + "\t" + student.Prosek + "\t\t" + student.TrenutnaGodinaStudija + "\t" + student.FaxSmer+ "\t" + student.DatumUpisa.ToShortDateString() + "\t\n";
+
+        }
     }
 
     class Program
@@ -233,8 +241,7 @@ namespace Student {
         {
             foreach (Student s in studenti)
             {
-                Console.WriteLine(s.Ime + "\n" + s.Prezime + "\n" + s.Prosek + "\n" + s.TrenutnaGodinaStudija + "\n" + s.DatumUpisa.Date.ToString("dd-MM-yyyy")+ "\n"+ s.BrojIndeksa.godina +$"/"+ s.BrojIndeksa.broj + "\n" + s.FaxSmer.Ispis() + "\n");
-
+                Console.Write(s.IspisStudentaUTabeli());
             }
             return;
         }
@@ -359,7 +366,7 @@ namespace Student {
 
         }
 
-        void Brisanje()
+        void Brisanje(List<Student> studenti)
         {
 
         }
