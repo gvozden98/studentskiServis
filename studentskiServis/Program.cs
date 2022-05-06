@@ -6,7 +6,7 @@ namespace Student {
 
     public class Student
     {
-        string ime;
+        string ime; // ne znam zasto mi trazi da bude nullable
         string prezime;
         double prosek;
         int trenutnaGodinaStudija;
@@ -102,7 +102,6 @@ namespace Student {
 
                 prosekPom = Console.ReadLine();
                 okParse = Double.TryParse(prosekPom, out prosekVred);
-                Console.WriteLine(prosekVred);
                 if (okParse == true && prosekVred>=6d && prosekVred<=10d)
                 {
                     s.Prosek = (double)Math.Round(prosekVred, 2);
@@ -200,12 +199,7 @@ namespace Student {
                         break;
                 }
             }
-
-
-
-
-            Console.WriteLine(s.FaxSmer + "\n" + s.Ime + "\n" + s.Prezime + "\n" + s.Prosek + "\n" + s.TrenutnaGodinaStudija + "\n" + s.DatumUpisa.Date.ToString("dd-MM-yyyy"));
-            studenti.Add(s);
+            studenti.Add(s); //ubaci studenta u listu
         }
         public static void PrikazJednogStudenta(List<Student> studenti)
         {
@@ -229,7 +223,7 @@ namespace Student {
             {
                 if (s.BrojIndeksa.godina==godInd && s.BrojIndeksa.broj==brInd)
                 {
-                    Console.WriteLine(s.Ime + "\n" + s.Prezime + "\n" + s.Prosek + "\n" + s.TrenutnaGodinaStudija + "\n" + s.DatumUpisa.Date.ToString("dd-MM-yyyy")+ "\n"+ s.BrojIndeksa.godina +$"/"+ s.BrojIndeksa.broj + "\n" + s.FaxSmer.Ispis() +"\n");
+                    Console.WriteLine(s.IspisStudentaUTabeli());                    
                     return;
                 }
                 
@@ -271,10 +265,10 @@ namespace Student {
                 if (s.BrojIndeksa.Equals(b))
                 {
                     Console.WriteLine("Ime studenta:");
-                    s.Ime = Console.ReadLine();
+                    s.Ime = Console.ReadLine()??"N.";
 
                     Console.WriteLine("Prezime studenta:");
-                    s.Prezime = Console.ReadLine();
+                    s.Prezime = Console.ReadLine()??"N.";
 
                     Console.WriteLine("Prosek studenta:");
                     string? prosekPom;
@@ -360,14 +354,115 @@ namespace Student {
                 else
                 {
                     Console.WriteLine("Ne postoji student sa tim brojem indeksa!");
+                    return;
                 }
 
             }
 
         }
 
-        void Brisanje(List<Student> studenti)
+        public static void  Brisanje(List<Student> studenti)
         {
+
+            bool godParse = false;
+            bool indParse = false;
+            int godInd = 0;
+            int brInd = 0;
+
+            while (!godParse)
+            {
+                Console.WriteLine("Godina indeksa:");
+                godParse = int.TryParse(Console.ReadLine(), out godInd);
+
+            }
+            while (!indParse)
+            {
+                Console.WriteLine("Broj indeksa");
+                indParse = int.TryParse(Console.ReadLine(), out brInd);
+            }
+            BrojIndeksa b = new(godInd, brInd);
+
+            foreach (Student s in studenti)
+            {
+                if (s.BrojIndeksa.Equals(b))
+                {
+                    studenti.Remove(s);
+                    Console.WriteLine("***Brisanje studenta***" + b.godina + $"/" + b.broj);
+                    return;
+                }
+            }
+            Console.WriteLine("Student sa unetim brojem indeksa ne postoji");
+            return;
+        }
+
+        public static void PoslednjiIndeks(List<Student> studenti)
+        {
+
+        }
+        public static void Popularnost(List<Student> studenti,int god1, int god2)
+        {
+            int countGod1=0, countGod2 = 0;
+            foreach (Student student in studenti)
+            {
+                if (student.datumUpisa.Year==god1)
+                {
+                    countGod1++;
+                }
+                if (student.datumUpisa.Year == god2)
+                {
+                    countGod2++;
+                }
+            }
+            if (countGod1 > countGod2)
+                Console.WriteLine("Vise studenata je bilo " + god1);
+            else if (countGod2 > countGod1)
+                Console.WriteLine("Vise studenata je bilo " + god2);
+            else
+                Console.WriteLine("Bilo je isto studenata obe godine");
+        }
+        public static void SmerSaNajvecimBrojemStudenata(List<Student> studenti)
+        {
+            int isit = 0, me = 0, om = 0, ok = 0;
+            foreach (Student student in studenti)
+            {
+                if (student.smer==Smer.ISIT)
+                {
+                    isit++;
+                }
+                if (student.smer==Smer.ME)
+                {
+                    me++;
+                }
+                if (student.smer==Smer.OM)
+                {
+                    om++;
+                }
+                if (student.smer==Smer.OK)
+                {
+                    ok++;
+                }
+            }
+            if (isit>me && isit>om && isit>ok)
+            {
+                Console.WriteLine("Najvise ima ljudi na ISIT");
+                return;
+            }
+            if (me>isit && me>ok && me>om)
+            {
+                Console.WriteLine("Najvise je ljudi na ME");
+                return;
+            }
+            if (om>isit && om>ok && om > me)
+            {
+                Console.WriteLine("Najvise je ljudi na OM");
+                return;
+            }
+            else
+            {
+                Console.WriteLine("Najvise je ljudi na OK");
+                return;
+            }
+
 
         }
         static void Main()
@@ -379,6 +474,16 @@ namespace Student {
                           "3 - Prikaz svih studenata\n" +
                           "4 - Azuriranje\n" +
                           "5 - Brisanje\n"+
+                          "6 - Dodatno\n" +
+                          "0 - Izlazak";
+            string meniDodatno = "\n1 - Kreiranje\n" +
+                          "2 - Popularnost fakulteta odredjenih godina\n" +
+                          "3 - Prikaz svih studenata\n" +
+                          "4 - Azuriranje\n" +
+                          "5 - Brisanje\n" +
+                          "6 - Dodatno\n" +
+                          "7 - Dodatno\n" +
+                          "8 - Nazad\n" +
                           "0 - Izlazak";
 
 
@@ -401,15 +506,53 @@ namespace Student {
                         Azuriranje(studenti);
                         break;
                     case "5":
-                        Console.WriteLine("Brisanje");
+                        Brisanje(studenti);
+                        break;
+                    case "6":
+                        Console.WriteLine("Dodatno");
+                        Console.WriteLine(meniDodatno);
+                        odgovorKorisnika = Console.ReadLine();
+                        switch (odgovorKorisnika)
+                        {
+                            case "1":
+                                Console.WriteLine("Poslednji indeks");
+                                break;
+                            case "2":
+                                Console.WriteLine("Unesite dve godine:");
+                                int god1 = 2017;
+                                int god2 = 2018;
+                                Popularnost(studenti,god1,god2);
+                                break;
+                            case "3":
+                                Console.WriteLine("Ponovni upis");
+                                break;
+                            case "4":
+                                Console.WriteLine("Prosek po godinama studija");
+                                break;
+                            case "5":
+                                Console.WriteLine("Prosek po smeru");
+                                break;
+                            case "6":
+                                Console.WriteLine("Pregled svih studenata upisanih odredjene godine");
+                                break;
+                            case "7":
+                                Console.WriteLine("Smer sa najvecim brojem studenata");
+                                break;
+                            case "8":
+                                Console.WriteLine("Nazad");
+                                break;
+                            case "0":
+                                Console.WriteLine("\n*** Dovidjenja ***\n");
+                                return;
+                            default:
+                                Console.WriteLine("Pogresna operacija!\nPokusajte ponovo: ");
+                                break;
+                        }
                         break;
                     case "0":
                         Console.WriteLine("\n*** Dovidjenja ***\n");
                         return;
-                    default:
-                        //Console.WriteLine(studenti[0].FaxSmer + "\n" + studenti[0].Ime + "\n" + studenti[0].Prezime + "\n" + studenti[0].Prosek + "\n" + studenti[0].TrenutnaGodinaStudija + "\n" + studenti[0].DatumUpisa.Date.ToString("dd-MM-yyyy"));
-
-
+                    default:                       
                         Console.WriteLine("Pogresna operacija!\nPokusajte ponovo: ");
                         break;
                 }
